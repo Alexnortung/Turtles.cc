@@ -10,7 +10,7 @@ end
 
 local function turnLeft(turns)
     turns = turns or 1
-    for i = 0, turns do
+    for i = 1, turns do
         turtle.turnLeft()
         facingDirection = (facingDirection - 1) % 4
     end
@@ -18,7 +18,7 @@ end
 
 local function turnRight(turns)
     turns = turns or 1
-    for i = 0, turns do
+    for i = 1, turns do
         turtle.turnRight()
         facingDirection = (facingDirection + 1) % 4
     end
@@ -26,7 +26,7 @@ end
 
 local function forward(steps)
     steps = steps or 1
-    for i = 0, steps do
+    for i = 1, steps do
         turtle.forward()
     end
     local addSteps = ternary(facingDirection >= 2, -steps, steps)
@@ -39,7 +39,7 @@ end
 
 local function up(steps)
     steps = steps or 1
-    for i = 0, steps do
+    for i = 1, steps do
         turtle.up();
         y = y + 1
     end
@@ -47,7 +47,7 @@ end
 
 local function down(steps)
     steps = steps or 1
-    for i = 0, steps do
+    for i = 1, steps do
         turtle.down();
         y = y - 1
     end
@@ -71,15 +71,18 @@ local function cutTree()
             goAbove()
         else
             -- dig the bootom and move under the other logs
+            print("tree detected")
             local treeFinished = false
             turtle.dig()
             forward()
 
             while treeFinished == false do
+
                 turtle.digUp()
                 up()
                 local success, data = turtle.inspectUp()
-                if success and data.name == "oak_log" then
+                print(success, data.name)
+                if success and (data.name == "oak_log" or data.name == "minecraft:birch_log") then
                     --continue
                 else
                     treeFinished = true
@@ -93,3 +96,4 @@ local function cutTree()
     end
 end
 
+cutTree()
