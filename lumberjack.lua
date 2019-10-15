@@ -3,10 +3,23 @@ local treeDistance = 4 -- blocks between trees
 -- local trees = 5
 local x, y, z = 0, 0, 0 -- relative coordinates for the turtle
 local facingDirection = 0 -- 0 is towards positive x
-local state = 0 -- 0 cutting trees; 1 planting; 2 waiting
+local state = 0 -- 0 cutting trees; 1 planting; 2 waiting; 3 go back and refuel
 
 function ternary ( cond , T , F )
     if cond then return T else return F end
+end
+
+local function turnTo(dir)
+	local dirDiff = math.abs(facingDirection - dir)
+	if facingDirection == dir then
+		-- do nothing
+	elseif facingDirection > dir then
+		turnLeft(dirDiff)
+	else
+		--facingDirection mus be less than
+		turnRight(dirDiff)
+	end
+
 end
 
 local function turnLeft(turns)
@@ -71,6 +84,37 @@ local function goAbove()
     up()
     forward(2)
     down()
+end
+
+local function goToRefuel()
+	if z < 0 then
+		turnTo(1)
+		forward(math.abs(z) + 1)
+	end
+	turnTo(3)
+	forward(x)
+	-- go to refuel chest
+	-- take coal and refuel
+end
+
+local function plantTree()
+	-- set facing direction to positive x
+	if x % treeDistance == 0 then
+		turnTo(0)
+		-- place sapling
+		
+	end
+
+	turnTo(2)
+	forward()
+end
+
+local function bigTreeCutter(origin, prev)
+	-- inspect all other directions
+	if (x,y,z) == origin then
+		--check all four directions
+
+	end
 end
 
 local function cutTree()
@@ -146,4 +190,3 @@ while state ~= 2 do
 end
 
 
--- cutTree()
